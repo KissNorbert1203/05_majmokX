@@ -1,3 +1,7 @@
+const createMonkeyMW = require('../middleware/monkey/createMonkey')
+const getMonkey = require('../middleware/monkey/getMonkey')
+const deleteMonkey = require('../middleware/monkey/deleteMonkey')
+
 function addRoutes(app) {
     
     const monkeys = [
@@ -57,6 +61,8 @@ function addRoutes(app) {
         globalBananaId
     }
 
+
+
     const getMonkeys = (req, res, next) => {
         console.table(monkeys);
         return res.json(monkeys);
@@ -110,22 +116,6 @@ function addRoutes(app) {
     
     const getBanana = (req, res, next) => {
         res.status(200).json(bananas[res.locals.bananaIndex]);
-    
-    }
-    
-    const createMonkey = (req, res, next) => {
-        if (typeof req.body.name == 'undefined' || typeof req.body.sex == 'undefined' || typeof req.body.species == 'undefined') {
-            req.status(400).json({ Error: `Missing name, sex or species` })
-        }
-        const newMonkey = {
-            id: globalMonkeyId,
-            name: req.body.name,
-            sex: req.body.sex,
-            species: req.body.species
-        }
-        monkeys.push(newMonkey);
-        globalMonkeyId++;
-        return res.status(200).json(newMonkey)
     
     }
     
@@ -218,7 +208,9 @@ function addRoutes(app) {
     };
     
     app.get('/monkey', getMonkeys);
-    app.post('/monkey', createMonkey);
+    app.post('/monkey', createMonkeyMW(objRep), (res, req, next) =>{
+        res.json(res.locals.bananas)
+    });
     app.get('/monkey/:id', getMonkeyIndex, getMonkey);
     app.delete('/monkey/:id', getMonkeyIndex, deleteMonkeyBananas, deleteMonkey);
     app.patch('/monkey/:id', getMonkeyIndex, updateMonkey);
