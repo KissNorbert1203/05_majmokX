@@ -237,6 +237,8 @@ app.use((req, res, next) => {
     });
 });
 
+const port = process.env.PORT || 3000;
+
 var server = app.listen(3000, function () { 
     console.log('Server running on http://localhost:3000'); // Konzolra kiír egy üzenetet, hogy a szerver fut és melyik porton érhető el.
 });
