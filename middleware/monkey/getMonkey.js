@@ -1,14 +1,12 @@
-module.exports = (objRep)=>{
-    const {monkeys} = objRep
-    return (req, res, next) =>{
+module.exports = (objRep) => {
+    const { monkeys } = objRep;
+    return (req, res, next) => {
         const monkeyIdAsNumber = parseInt(req.params.id, 10);
-        const monkey = monkeys.find(e => e.id === monkeyIdAsNumber) 
+        const monkey = monkeys.find(m => m.id === monkeyIdAsNumber);
         if (!monkey) {
-            return res.status(404).json({
-                Error: `Requested monkeyID not found! ${req.params.id}`
-            });
+            return res.status(404).json({ error: `Monkey not found with id: ${req.params.id}` });
         }
-        res.locals.monkeyIndex = monkey
+        res.locals.monkey = monkey;
         return next();
-    }
-}
+    };
+};
